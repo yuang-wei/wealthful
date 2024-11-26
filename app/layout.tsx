@@ -1,36 +1,31 @@
-import type { Metadata } from 'next'
-import { getServerSession } from 'next-auth'
-import { redirect } from 'next/navigation'
-import { Toaster } from "@/components/ui/sonner"
+/* THIS FILE WAS GENERATED AUTOMATICALLY BY PAYLOAD. */
+import config from '@payload-config'
+import type { ServerFunctionClient } from 'payload'
+import { handleServerFunctions, RootLayout } from '@payloadcms/next/layouts'
+import React from 'react'
 
-import { authOptions } from './(auth)/api/auth/[...nextauth]/route'
-import './globals.css'
+import { importMap } from './admin/importMap.js'
+import '@payloadcms/next/css'
 
-
-export const metadata: Metadata = {
-  title: {
-    default: 'Wealthful - The all-in-one wealth management tool.',
-    template: `%s - Wealthful`,
-  },
+type Args = {
+  children: React.ReactNode
 }
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  const session = await getServerSession(authOptions)
+const serverFunction: ServerFunctionClient = async function (args) {
+  'use server'
+  return handleServerFunctions({
+    ...args,
+    config,
+    importMap,
+  })
+}
 
-  if (session) {
-    redirect('/dashboard')
-  }
-
+export default async function Layout({ children }: Args) {
   return (
-    <html lang="en">
-      <body>
-        {children}
-        <Toaster position="top-center" />
-      </body>
-    </html>
+    <RootLayout config={config} importMap={importMap} serverFunction={serverFunction}>
+      {children}
+    </RootLayout>
   )
 }
+
+
